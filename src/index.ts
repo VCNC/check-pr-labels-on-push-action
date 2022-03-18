@@ -7,9 +7,7 @@ async function run() {
 
   const labelNames = await getPullRequestLabelNames(client);
 
-  const labels = getInputLabels();
-  const result = labels.every((label) => labelNames.includes(label));
-  core.setOutput("result", result);
+  core.setOutput("labelNames", labelNames);
 }
 
 async function getPullRequestLabelNames(
@@ -27,12 +25,6 @@ async function getPullRequestLabelNames(
 
   const pr = response.data.length > 0 && response.data[0];
   return pr ? pr.labels.map((label) => label.name) : [];
-}
-
-function getInputLabels(): string[] {
-  const raw = core.getInput("labels", { required: true });
-  const json = JSON.parse(raw);
-  return Array.isArray(json) ? json : [];
 }
 
 run().catch((err) => {
